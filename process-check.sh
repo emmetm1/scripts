@@ -1,12 +1,14 @@
 #!/bin/bash
 
-declare -a hosts_list
+declare -a host_list
 declare -a failed_hosts
 declare -i fail_count=0
 
-mapfile -t hosts_list < host-list.txt
+while IFS= read -r line; do
+    host_list+=("$line")
+done < ./host_list.txt
 
-for host in ${hosts_list[@]}; do
+for host in ${host_list[@]}; do
   ssh root@$host -t "pgrep $1" > /dev/null
   if [ $? -gt 0 ] 
   then
